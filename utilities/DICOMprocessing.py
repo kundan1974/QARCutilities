@@ -130,6 +130,10 @@ def dcmrtstruct2nii(rtstruct_file, dicom_file, outputdir, structures=None, gzip=
 def DICOM2NIFTI(inputdir,outputdir):
     errors = []
     dicom_folder_list = os.listdir(inputdir)
+    if 'images' not in os.listdir(outputdir):
+        os.mkdir(os.path.join(outputdir,"images"))
+    if 'mask' not in os.listdir(outputdir):
+        os.mkdir(os.path.join(outputdir,"masks"))
     for i in range(0,len(dicom_folder_list)):
         if os.path.isdir(os.path.join(inputdir,dicom_folder_list[i])):
             print("\n")
@@ -157,6 +161,8 @@ def DICOM2NIFTI(inputdir,outputdir):
                         NewMaskFileName = dicom_folder_list[i] +"_" + CTmaskData
                         os.rename(CTimageDataPath,os.path.join(outputdir,NewImageFileName))
                         os.rename(CTmaskDataPath,os.path.join(outputdir,NewMaskFileName))
+
+
                         shutil.move(os.path.join(outputdir,NewImageFileName),os.path.join(outputdir,"images"))
                         shutil.move(os.path.join(outputdir,NewMaskFileName),os.path.join(outputdir,"masks"))
                         # Make sure you have folder named 'images','masks and temp'
