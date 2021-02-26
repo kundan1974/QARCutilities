@@ -1,4 +1,6 @@
 # Ignore Mac system files
+.ipynb_checkpoints
+__pycache__
 .DS_Store
 ./utilities/.DS_Store
 ./utilities/dcmrtstruct2nii/.DS_Store

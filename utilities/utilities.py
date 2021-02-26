@@ -32,6 +32,9 @@ def create_df(
     import pandas as pd
     import os
     img_files = os.listdir(imgfolder) # list of files present in Images folder
+    if '.DS_Store' in img_files:
+        img_files.remove('.DS_Store' )
+
     if datafile[-4:] == 'xlsx':
         df = pd.read_excel(datafile)
     else:
@@ -40,8 +43,10 @@ def create_df(
     # Extracting ID from filename 
     # (These filename are of images present in the Images folder)
     IDs = []
+    
     for i in range(len(img_files)):
-        IDs.append(int(img_files[i][:-4]))
+        tempID = os.path.splitext(img_files[i])[0]
+        IDs.append(int(tempID))
 
     # As per the file name ---- extracting the same patientID as 
     # per the file name from the main dataframe
@@ -69,7 +74,7 @@ def create_df(
 
     df_new = df_new.append(data,True)
     
-    return df_new 
+    return df_new
 
 def split_traintest(
                     path2allLabels='./Datafiles/Labels/labels_211.csv',
