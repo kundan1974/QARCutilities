@@ -1,0 +1,4 @@
+# Ignore Mac system files
+.DS_Store
+./utilities/.DS_Store
+./utilities/dcmrtstruct2nii/.DS_Store
