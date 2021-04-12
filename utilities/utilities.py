@@ -3,6 +3,9 @@ This script contins various utility functions to be used when building
 and training Deep Learning models.
 
 """
+from scipy.ndimage.interpolation import rotate
+
+
 def create_df(
                 imgfolder='./Datafiles/Images/AllNumpyImages_211',
                 datafile='path_to_data_file'
@@ -529,7 +532,7 @@ def check_datagen_images(img,index=0):
         ax.label_outer() # Hide x labels and tick labels for top plots and y ticks for right plots.
        
 
-def check_numpy_images(ID,img_path='./Datafiles/Images/AllNumpyImages_211/'):
+def check_numpy_images(ID,img_path='./Datafiles/Images/AllNumpyImages_211/',rotate=True):
     
     '''
     Function to display the CTscan images of particular 
@@ -554,8 +557,9 @@ def check_numpy_images(ID,img_path='./Datafiles/Images/AllNumpyImages_211/'):
     list_files = os.listdir(img_path)
     for i in list_files:
         if i == str(ID) + '.npy':
-            img = np.load(os.path.join(img_path,str(ID) + '.npy'))
-            my_img = np.rot90(img)
+            my_img = np.load(os.path.join(img_path,str(ID) + '.npy'))
+            if rotate:
+                my_img = np.rot90(my_img)
     fig, axes = plt.subplots(nrows=8, ncols=8,figsize=(24,24),sharex='col', sharey='row')
     fig.suptitle(f'CT Scan Images for: {ID}',fontsize=18,fontweight=5)
     fig.subplots_adjust(hspace=0.1)
