@@ -38,6 +38,11 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
     dicom_image = DcmInputAdapter().ingest(dicom_file)
     rtstructs = rtreader.ingest(rtstruct_file)
+    for i in rtstructs:
+        if i['name'] == 'gtv_1':
+            rtstruct_contours = i['sequence']
+    else:
+        print('Structure(gtv_1) not found')
     rtstruct_contours = rtstructs[0]['sequence']
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
 
