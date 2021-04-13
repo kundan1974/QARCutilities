@@ -41,8 +41,8 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
     for i in rtstructs:
         if i['name'] == 'gtv_1':
             rtstruct_contours = i['sequence']
-    else:
-        print(f'Structure(gtv_1) not found. Found {i} Structure')
+        else:
+            print(f'Structure(gtv_1) not found. Found {i["name"]} Structure')
     rtstruct_contours = rtstructs[0]['sequence']
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
 
