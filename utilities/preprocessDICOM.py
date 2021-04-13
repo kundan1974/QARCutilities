@@ -43,7 +43,6 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
             rtstruct_contours = i['sequence']
         else:
             print(f'Structure(gtv_1) not found. Found {i["name"]} Structure')
-    rtstruct_contours = rtstructs[0]['sequence']
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
 
     for contour in rtstruct_contours:
@@ -67,7 +66,7 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
 
         z = int(pts[0, 2])
 
-    mask = dcm_patient_coords_to_mask.convert(rtstructs[0]['sequence'], 
+    mask = dcm_patient_coords_to_mask.convert(rtstruct_contours, 
     dicom_image, mask_background_value, mask_foreground_value)
     mask.CopyInformation(dicom_image)
     msk_array = sitk.GetArrayFromImage(mask)
