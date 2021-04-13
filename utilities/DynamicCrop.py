@@ -63,9 +63,11 @@ def DynamicCrop(Path2ImgMsk='../imagedata/workingFolder/',
     Path2Img = os.path.join(Path2ImgMsk,'images')
     Path2Msk = os.path.join(Path2ImgMsk,'masks')
     ImgNames = os.listdir(Path2Img)
-    ImgNames.remove('.DS_Store')
+    if '.DS_Store' in ImgNames:
+        ImgNames.remove('.DS_Store')
     MskNames = os.listdir(Path2Msk)
-    MskNames.remove('.DS_Store')
+    if '.DS_Store' in MskNames:
+        MskNames.remove('.DS_Store')
     ImgNames.sort()
     MskNames.sort()
     cropped_img_list = []
