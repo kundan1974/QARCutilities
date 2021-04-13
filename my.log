@@ -1,3 +1,9 @@
 2021-04-13 08:34:30,549 - root - INFO - Going to start cropping for 260194_image.nii.gz images
 2021-04-13 08:35:54,360 - root - INFO - Finished cropping for 260194_image.nii.gz images
 2021-04-13 08:35:54,374 - root - INFO - 1 images are cropped. Details are saved in a file named "converted_list.csv" and path to file is:../imagedata/Eso_Numpy_ZeroCent_211/
+2021-04-13 09:00:33,109 - root - INFO - Going to start cropping for 260194_image.nii.gz images
+2021-04-13 09:00:33,109 - root - INFO - Going to start cropping for 260194_image.nii.gz images
+2021-04-13 09:01:42,858 - root - INFO - Finished cropping for 260194_image.nii.gz images
+2021-04-13 09:01:42,858 - root - INFO - Finished cropping for 260194_image.nii.gz images
+2021-04-13 09:01:42,909 - root - INFO - 1 images are cropped. Details are saved in a file named "converted_list.csv" and path to file is:D:/imagedata/Eso_Numpy_NoZeroCent_211
+2021-04-13 09:01:42,909 - root - INFO - 1 images are cropped. Details are saved in a file named "converted_list.csv" and path to file is:D:/imagedata/Eso_Numpy_NoZeroCent_211
