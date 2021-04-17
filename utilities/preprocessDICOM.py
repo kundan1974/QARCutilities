@@ -33,7 +33,7 @@ def resample_img(image_array, dicom_image, new_spacing=[1,1,1]):
 
 
 def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foreground_value = 255,zero=False,
-                minbound=-1000,maxbound=400,resample = 1,fill_value = 0,crop_fact = 64,crop_length=64):
+                norm=True,minbound=-1000,maxbound=400,resample = 1,fill_value = 0,crop_fact = 64,crop_length=64):
     rtreader = RtStructInputAdapter()
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
     dicom_image = DcmInputAdapter().ingest(dicom_file)
@@ -140,10 +140,12 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
         z = coor[2]
         crop_coords.append([xmin,xmax,ymin,ymax,z])
 
-
-    MIN_BOUND = minbound
-    MAX_BOUND = maxbound
-    img_array_norm = normalize(img_array_resampled,MIN_BOUND,MAX_BOUND)
+    if norm:
+        MIN_BOUND = minbound
+        MAX_BOUND = maxbound
+        img_array_norm = normalize(img_array_resampled,MIN_BOUND,MAX_BOUND)
+    else:
+        img_array_norm = img_array_resampled
     if zero:
         img_array_norm = zero_center(img_array_norm)
     img_crop = np.zeros((crop_fact,crop_fact,len(final_coords)))
