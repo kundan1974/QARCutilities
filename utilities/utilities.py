@@ -560,12 +560,24 @@ def check_numpy_images(ID,img_path='./Datafiles/Images/AllNumpyImages_211/',rota
             my_img = np.load(os.path.join(img_path,str(ID) + '.npy'))
             if rotate:
                 my_img = np.rot90(my_img)
-    fig, axes = plt.subplots(nrows=8, ncols=8,figsize=(24,24),sharex='col', sharey='row')
-    fig.suptitle(f'CT Scan Images for: {ID}',fontsize=18,fontweight=5)
-    fig.subplots_adjust(hspace=0.1)
-    fig.subplots_adjust(wspace=0.3)
+    if my_img.shape[2] == 64:
+        fig, axes = plt.subplots(nrows=8, ncols=8,figsize=(24,24),sharex='col', sharey='row')
+        fig.tight_layout(rect=[0, 0, 0.95, 0.95],pad=0.2, w_pad=0.5, h_pad=0.5)
+        fig.suptitle(f'CT Scan Images for: {ID}',fontsize=28,fontweight=10)
+    if my_img.shape[2] == 96:
+        fig, axes = plt.subplots(nrows=12, ncols=8,figsize=(32,32),sharex='col', sharey='row')
+        fig.tight_layout(rect=[0.3, 0, 0.95, 0.95])
+        fig.suptitle(f'CT Scan Images for: {ID}',fontsize=36,fontweight=10)
+    if my_img.shape[2] == 128:
+        fig, axes = plt.subplots(nrows=16, ncols=8,figsize=(64,64),sharex='col', sharey='row')
+        fig.tight_layout(rect=[0.4, 0, 0.96, 0.96])
+        fig.suptitle(f'CT Scan Images for: {ID}',fontsize=48,fontweight=10)
+    
+    
+    #fig.subplots_adjust(hspace=0.3)
+    #fig.subplots_adjust(wspace=0.1)
 
-    for ax, i in zip(axes.flatten(), range(len(my_img))):
+    for ax, i in zip(axes.flatten(), range(my_img.shape[2])):
         ax.imshow(my_img[:,:,i],cmap='gray')
         ax.set(title=f'Slice no:{i}')
         ax.label_outer() # Hide x labels and tick labels for top plots and y ticks for right plots.
