@@ -12,8 +12,8 @@ def normalize(image,MIN_BOUND,MAX_BOUND):
     image[image<0] = 0.
     return image
 
-def zero_center(image):
-    image = image - image.mean()
+def zero_center(image, mean4allimage):
+    image = image - mean4allimage
     return image
 
 def resample_img(image_array, dicom_image, new_spacing=[1,1,1]):
@@ -33,7 +33,45 @@ def resample_img(image_array, dicom_image, new_spacing=[1,1,1]):
 
 
 def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foreground_value = 255,zero=False,
-                norm=True,minbound=-1000,maxbound=400,resample = 1,fill_value = 0,crop_fact = 64,crop_length=64):
+                norm=True,minbound=-1000,maxbound=400,mean4allimage=0,crop_fact = 64,crop_length=64):
+
+    """
+    This function returns a cropped numpy image as per the size defined in parameters. 
+    Parameters:
+    -----------
+    dicom_file: str
+        Path to folder having all dicom files for a particular patient. 
+        These images are DICOM format images.
+    rtstruct_file: str
+        Path to the RT Structure file for the same patient. 
+    mask_background_value: int
+        Value of mask background. Default value is 0
+    mask_foreground_value: int
+        Value of mask background. Default value is 255
+    zero: bolean
+        If zero centring then True. Default is False
+    norm: bolean
+        if normalization then True. Default is True
+    minbound: int
+        if normalization is True then this value is used to clip all the HUs below this value
+    maxbound: int
+        if normalization is True then this value is used to clip all the HUs above this value
+    mean4allimage: float
+        if zero centring is True then this value is used for zerocentring. 
+        This is not the mean pixel value of indvidual patient
+        This is the mean value of all the pixels of all the patients in dataset. 
+    crop_fact: int
+        This is the cropping factor for each slice. Default value is 64, so cropping size is 64x64
+    crop_length: int
+        This is the cropping factor in z direction. Default value is 64. So crop_fact of 64 and 
+        crop_length of 64 will crop the image to a size of 64x64x64
+
+    Returns: 
+    --------
+        image as a numpy array
+
+    """
+
     rtreader = RtStructInputAdapter()
     dcm_patient_coords_to_mask = DcmPatientCoords2Mask()
     dicom_image = DcmInputAdapter().ingest(dicom_file)
@@ -147,7 +185,7 @@ def preprocess(dicom_file,rtstruct_file,mask_background_value = 0,mask_foregroun
     else:
         img_array_norm = img_array_resampled
     if zero:
-        img_array_norm = zero_center(img_array_norm)
+        img_array_norm = zero_center(img_array_norm,mean4allimage)
     img_crop = np.zeros((crop_fact,crop_fact,len(final_coords)))
 
     for i in range(len(crop_coords)):
