@@ -162,8 +162,8 @@ def get_patient_ids(dicom_images_path):
 # Test this method
 
 dicom_images_path = "/home/alokdwivedi/dev/avanid/data/qarc/dicom"
-completed_dicom_images_path = " /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom"
-output_nympy_path = " /home/alokdwivedi/dev/avanid/data/qarc/numpy"
+completed_dicom_images_path = "/home/alokdwivedi/dev/avanid/data/qarc/completed_dicom"
+output_nympy_path = "/home/alokdwivedi/dev/avanid/data/qarc/numpy"
 
 preprocess_all_dicom_images(dicom_images_path,completed_dicom_images_path,output_nympy_path)
 
