@@ -16,5 +16,6 @@ All python module dependency has been cpatured in requirements.txt. You can use 
 
 ## Preprocessing all patient images
 Python script `preprocess.py` contains logic to preprocess all patient images. For every patient, once the numpy file has been successfully created, the original patient folder is moved to a specified completed folder. If any error is encountered during preprocessing than that patient folder is moved to an error folder under the specified completed folder
+In the overall workflow, DICOM images will be fetched from server and numpy files will be split in test and train sets for CNN model to use as inputs
 
 
