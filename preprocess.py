@@ -4,99 +4,11 @@
 # Input path where completed patients folder to be moved
 # e.g. /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
 
-# Goal is to create one npy file for each patient (64x64x64) to the output folder
-# e.g. output path - /home/alokdwivedi/dev/avanid/data/qarc/numpy
-
-# enumerate all patient folders
-# patient is top level folder name - check its a valid 6 digit number
-# This will be patientDICOM_images_path e.g. /home/alokdwivedi/dev/avanid/data/qarc/dicom/201489
-# get the path of RS file -> RS.<patient_id>.dcm (e.g. String.format("RS.%d.dcm, patient_id))
-#  get image by calling
-# preprocessDICOM.preprocess(patientDICOM_images_path,RTstrPath,zero=False)
-# save npy file for patient to output dir ie to /home/alokdwivedi/dev/avanid/data/qarc/numpy
-
-# move patient folder to 'completed' folder ie to /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
-# if error during processing patient folder (e.g. no RS fiel or more than one RS file) then move to 'error' folder
-# under /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
-
-#PLAN
-#step 1: get the input path for the dicom file - will use os.walk (more info later)
-# store this in variable: e.g. dicom_images_path = "/home/alokdwivedi/dev/avanid/data/qarc/dicom"
-
-#step 2: get path list for patients
-#reuse code from original
-
-#CODE
-#pathlist = []
-#RTstrfiles=[]
-
-#for x in os.walk(path2dcm):
-#    pathlist.append(x)
-# pathlist.pop[0] -get rid of first argument returned from os.walk which is the root (dicom folder), we only want the paths for the patient folders
-
-#step 3: check for valid patient ID
-#for error checking use a boolean
-#to go through each patient will need a for loop to get each path for each patient
-
-# for i in pathlist:
-#   temp_patient_path = i
-
-# to get the ID it is the last part of the path
-#get this using os.path.basename
-
-#CODE:
-# temp_ID = os.path.basename(temp_patient_path)
-
-#then check that it is a 6 digit ID (validation)
-#if temp_ID.length() != 6:
-#   validID == false
-
-
-#step 4: check is RS file exists for each patient
-# in original we iterated through the whole file and stored in an array then got the 0th position (only need the first one)
-# instead we want to see if the file exists - use boolean?
-# if true continue with preprocessing
-# if false move to error file
-
-
-#inside for loop check for RS file
-#RS_exists = os.path.exists(temp_patient_path)
-#   if RS_exists == false or ValidID == false:
-#       CODE FOR MOVING INTO ERROR - step 5
-#   else:
-#       CODE FOR CONTINUING TO PREPROCESSING
-
-
-#step 5: dealing with error
-# get destination path: /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom/error, store in variable
-# error_path = /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
-#use shutil.move
-
-#CODE:
-#shutil.move(temp_patient_path, error_path)
-#NB need to import shutil
-
-
-#step 6: continue with preprocessing
-#CODE:
-#outputdir = /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
-#fname = os.path.join(outputdir,patient_id + '.npy')
-#print(f'Going to generate cropped {fname}')
-#img = preprocessDICOM.preprocess(DICOMpath,RTstrPath,zero=False)
-
-# NOT SURE - think the above line of code does the preprocessing of image i.e., cropping etc
-
-#CODE:
-# np.save(fname,img)
-
-#next we move to the completed folder like we did with the error files
-#shutil.move(temp_patient_path, output_dir)
-
+# output path where numpy files for each patient will be stored
+# e.g. - /home/alokdwivedi/dev/avanid/data/qarc/numpy
 
 
 import os
-import string
-
 from utilities import preprocessDICOM
 import numpy as np
 import shutil
@@ -106,7 +18,7 @@ RT_STRUCT_FILE_FORMAT = "RS.{:s}.dcm"
 
 
 def valid_patient_id(patient_id):
-# Question: Can we assume that the patient ID will always be a 6 digit integer value?
+    # Question: Can we assume that the patient ID will always be a 6 digit integer value?
     valid = True
     if len(patient_id) != 6:
         valid = False
@@ -117,17 +29,19 @@ def valid_patient_id(patient_id):
             # handle the exception
             valid = False
     return valid
-#method has been checked with incorrect type and incorrect length in jupyter notebook
-#Question: is try except the same as try catch but python syntax rather than java syntax
+
+
+# method has been checked with incorrect type and incorrect length in jupyter notebook
+# Question: is try except the same as try catch but python syntax rather than java syntax
 
 
 def move_to_error_folder(patient_id_path, completed_dicom_images_path, patient_id):
-# first get error folder path
+    # first get error folder path
     error_path = os.path.join(completed_dicom_images_path, "error")
     error_patient_id_path = os.path.join(error_path, patient_id)
     if os.path.exists(error_patient_id_path):
         shutil.rmtree(error_patient_id_path, ignore_errors=True)
-    shutil.move(patient_id_path,error_path)
+    shutil.move(patient_id_path, error_path)
 
 
 def move_to_completed_folder(patient_id_path, completed_dicom_images_path, patient_id):
@@ -148,6 +62,7 @@ def preprocess_all_dicom_images(dicom_images_path, completed_dicom_images_path, 
             # move this folder to error folder
             patient_id_path = os.path.join(dicom_images_path, patient_id)
             move_to_error_folder(patient_id_path, completed_dicom_images_path, patient_id)
+
 
 def preprocess_one_patient(completed_dicom_images_path, dicom_images_path, output_nympy_path, patient_id):
     patient_id_path = os.path.join(dicom_images_path, patient_id)
@@ -187,15 +102,10 @@ def get_patient_ids(dicom_images_path):
 
 
 # Test this method
-
+# TODO: These inputs will be parameterised and become part of overall workflow that involves
+# downloading DICOM images from DICOM server and then preprocessing and moving to output folder for ML Models
 dicom_images_path = "/home/alokdwivedi/dev/avanid/data/qarc/dicom"
 completed_dicom_images_path = "/home/alokdwivedi/dev/avanid/data/qarc/completed_dicom"
 output_nympy_path = "/home/alokdwivedi/dev/avanid/data/qarc/numpy"
 
-preprocess_all_dicom_images(dicom_images_path,completed_dicom_images_path,output_nympy_path)
-
-
-
-
-
-
+preprocess_all_dicom_images(dicom_images_path, completed_dicom_images_path, output_nympy_path)
