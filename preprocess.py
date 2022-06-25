@@ -1,11 +1,11 @@
 # Input path for dicom images of patients - every pateint has one folder by name of patient Id
-# e.g. /home/alokdwivedi/dev/avanid/data/qarc/dicom
+# e.g. ~/dev/avanid/data/qarc/dicom
 
 # Input path where completed patients folder to be moved
-# e.g. /home/alokdwivedi/dev/avanid/data/qarc/completed_dicom
+# e.g. ~/dev/avanid/data/qarc/completed_dicom
 
 # output path where numpy files for each patient will be stored
-# e.g. - /home/alokdwivedi/dev/avanid/data/qarc/numpy
+# e.g. - ~/dev/avanid/data/qarc/numpy
 
 
 import os
@@ -54,7 +54,7 @@ def move_to_completed_folder(patient_id_path, completed_dicom_images_path, patie
         logging.warning(f"Found existing folder {completed_patient_id_path}. Going to remove it")
         shutil.rmtree(completed_patient_id_path, ignore_errors=True)
     shutil.move(patient_id_path, completed_dicom_images_path)
-    logging.error(f"Moved Patient folder {patient_id_path} to completed location {completed_dicom_images_path} "   
+    logging.info(f"Moved Patient folder {patient_id_path} to completed location {completed_dicom_images_path} "   
                   f"for Patient Id {patient_id}")
 
 
