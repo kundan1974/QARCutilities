@@ -16,7 +16,9 @@ import sys
 import logging
 import QarcExceptions
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[logging.FileHandler("qarc.log"),
+                  logging.StreamHandler(sys.stdout)])
 
 # NOTE: Its assumed that RT Struct file will follow a naming convention of RS.<patient_id>.dcm
 RT_STRUCT_FILE_FORMAT = "RS.{:s}.dcm"
@@ -58,19 +60,19 @@ def move_to_completed_folder(patient_id_path, completed_dicom_images_path, patie
                   f"for Patient Id {patient_id}")
 
 
-def preprocess_all_dicom_images(dicom_images_path, completed_dicom_images_path, output_nympy_path):
+def preprocess_all_dicom_images(dicom_images_path, completed_dicom_images_path, output_numpy_path):
     patient_ids = get_patient_ids(dicom_images_path)
     total_patients = len(patient_ids)
-    logging.info(f"Going to process total {total_patients} patients DICOM images")
+    logging.info(f"Going to process total {total_patients} patients DICOM images from input path:{dicom_images_path}")
     completed_patients = 0
     error_patients = 0
 
     for patient_id in patient_ids:
         try:
-            preprocess_one_patient(completed_dicom_images_path, dicom_images_path, output_nympy_path, patient_id)
+            preprocess_one_patient(completed_dicom_images_path, dicom_images_path, output_numpy_path, patient_id)
             completed_patients += 1
         except (QarcExceptions.PatientRSFileException,QarcExceptions.PatientInvalidIdException) as e:
-            pass
+            error_patients += 1
         except Exception as e:
             error_patients += 1
             logging.error(f"An error for patient_id {patient_id}.\n{e}")
@@ -95,11 +97,10 @@ def preprocess_one_patient(completed_dicom_images_path, dicom_images_path, outpu
         # check if RS file exists in that patient
         if os.path.exists(patient_rt_struct_file_path):
             patient_numpy_file_path = os.path.join(output_nympy_path, patient_id + ".npy")
-            print(f'Going to generate cropped {patient_numpy_file_path}')
+            logging.info(f'Going to generate cropped {patient_numpy_file_path}')
             img = preprocessDICOM.preprocess(patient_id_path, patient_rt_struct_file_path, zero=False)
-            # img = [0, 1, 2]
             np.save(patient_numpy_file_path, img)
-            print(f'{patient_numpy_file_path} Cropped Successfully')
+            logging.info(f'{patient_numpy_file_path} Cropped Successfully')
             move_to_completed_folder(patient_id_path, completed_dicom_images_path, patient_id)
         else:
             logging.error(f"Ignoring Patient Id {patient_id} as it does not have an RS file {patient_rt_struct_file_path}");
