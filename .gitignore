@@ -4,3 +4,4 @@ __pycache__
 .DS_Store
 ./utilities/.DS_Store
 ./utilities/dcmrtstruct2nii/.DS_Store
+/qarc.log
