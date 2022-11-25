@@ -5,3 +5,4 @@ __pycache__
 ./utilities/.DS_Store
 ./utilities/dcmrtstruct2nii/.DS_Store
 /qarc.log
+.idea/
