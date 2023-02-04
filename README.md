@@ -22,8 +22,9 @@ In the overall workflow, DICOM images will be fetched from server and numpy file
 - `setup_preprocess.sh` bash scripts adds a crontab entry to schedule running `preprocess.sh` at 22:00 hours every day. This will ensure any new DICOM patient images added will be automatically processed on next run
 
 ## Misc 
-https://github.com/thoraciclang/Deep_Lung - Models based on Cox Proportional Hazard Model and Kaplan Meir Analysis
+Models based on Cox Proportional Hazard Model and Kaplan Meir Analysis
+https://github.com/thoraciclang/Deep_Lung
 
-Combining clinical data with images
-https://ieeexplore.ieee.org/document/9661330/
-https://youtu.be/u4H3KtGxM7I
+### Combining clinical data with images
+https://ieeexplore.ieee.org/document/9661330/ - IEEE Paper
+Presentation - https://youtu.be/u4H3KtGxM7I
